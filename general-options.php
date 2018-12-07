@@ -1,5 +1,5 @@
 <?php
-/* Function to configure Mimi Captcha for Wordpress */
+//Function to configure Mimi Captcha for Wordpress
 function micaptcha_general_options() {
 ?>
 <div class="wrap">
@@ -20,7 +20,9 @@ function micaptcha_general_options() {
 		'password' => array('yes', 'no'),
 		'lost' => array('yes', 'no'),
 		'comments' => array('yes', 'no'),
-		'registered' => array('yes', 'no')
+		'registered' => array('yes', 'no'),
+		'whitelist_ips' => array()
+		//'whitelist_usernames' => array()
 	);
 	if (isset($_POST['submit']) && check_admin_referer(plugin_basename(__FILE__), 'micaptcha_settings_nonce')) {
 ?>
@@ -32,7 +34,17 @@ function micaptcha_general_options() {
 <?php
 		foreach ($mi_options as $mi_option => $mi_value) {
 			if (isset($_POST[$mi_option])) {
-				if (in_array($_POST[$mi_option], $mi_value, true)) { //Validate POST calls
+				if (empty($mi_value)) {
+					$data = (!empty($_POST[$mi_option])) ? explode("\n", str_replace("\r", "", stripslashes($_POST[$mi_option]))) : array();
+					if (!empty($data)) {
+						foreach ($data as $key => $ip) {
+							if ('' == $ip) unset($data[$key]);
+							else $data[$key] = sanitize_text_field($data[$key]);
+						}
+					}
+					update_option('micaptcha_'.$mi_option, $data);
+				}
+				else if (in_array($_POST[$mi_option], $mi_value, true)) { //Validate POST calls
 					$mi_index = array_search($_POST[$mi_option], $mi_value, true);
 					if (isset($mi_value[$mi_index])) update_option('micaptcha_'.$mi_option, $mi_value[$mi_index]);
 					//update_option() function receives $mi_value[$mi_index] as the second parameter, which is safe
@@ -47,6 +59,8 @@ function micaptcha_general_options() {
 	foreach ($mi_options as $mi_option => $mi_value) {
 		$mi_opt[$mi_option] = get_option('micaptcha_'.$mi_option);
 	}
+	$whitelist_ips = (is_array($mi_opt['whitelist_ips']) && !empty($mi_opt['whitelist_ips'])) ? implode("\n", $mi_opt['whitelist_ips']) : '';
+	//$whitelist_usernames = (is_array($mi_opt['whitelist_usernames']) && !empty($mi_opt['whitelist_usernames'])) ? implode("\n", $mi_opt['whitelist_usernames']) : '';
 ?>
 	<form method="post" action="" id="micaptcha">
 		<?php wp_nonce_field(plugin_basename(__FILE__), 'micaptcha_settings_nonce');//?>
@@ -220,12 +234,12 @@ function micaptcha_general_options() {
 		<p><?php _e('You can upload fonts (.ttf) to /wp-content/plugins/mimi-captcha/fonts folder. Fonts will be chosen randomly when generating Captcha.', 'mimi-captcha'); ?></p>
 
 		<h2><?php _e('Whitelist', 'mimi-captcha'); ?></h2>
-		<p><?php _e('Coming Soon...', 'mimi-captcha'); ?></p>
+		<div>
+			<p><?php _e('One IP or IP range (1.2.3.4-5.6.7.8) per line.', 'mimi-captcha'); ?></p>
+			<textarea name="whitelist_ips" rows="10" cols="50"><?php echo esc_textarea($whitelist_ips); ?></textarea>
+		</div>
 
 		<h2><?php _e('Blacklist', 'mimi-captcha'); ?></h2>
-		<p><?php _e('Coming Soon...', 'mimi-captcha'); ?></p>
-
-		<h2><?php _e('Limit login attempts', 'mimi-captcha'); ?></h2>
 		<p><?php _e('Coming Soon...', 'mimi-captcha'); ?></p>
 
 		<?php submit_button(); ?>

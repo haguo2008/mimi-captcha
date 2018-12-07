@@ -1,12 +1,12 @@
 # Mimi Captcha
 
 * Contributors: stevenjoezhang
-* Donate link: https://zhangshuqiao.org/2018-07/WordPress中文验证码
+* Donate link: https://zhangshuqiao.org/2018-07/WordPress中文验证码/
 * Tags: captcha, captcha code, security, spam blocker, forms captcha, protection, text captcha, anti-spam
 * Requires at least: 3.0
-* Tested up to: 5.0.0
+* Tested up to: 5.0
 * Requires PHP: 5.2.4
-* Stable tag: 0.0.4
+* Stable tag: 0.0.5
 * License: GPLv3 or later
 * License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,7 +32,7 @@ Adds Captcha Code anti-spam methods to WordPress forms. Forms include comments f
 ### Requirements
 
 1. PHP gd2 extension is required. You can run 'php -m' or use 'phpinfo()' to check if it's installed properly.
-生成验证码的imagettftext()函数需要gd库和FreeType支持。您可以通过执行php -m或phpinfo()检查php是否具有此拓展，若无则验证码无法正确显示。
+生成验证码的'imagettftext()'函数需要gd库和FreeType支持。您可以通过执行'php -m'或'phpinfo()'检查php是否具有此拓展，以确保验证码能够正确显示。
 2. Upgrade your PHP and WordPress to the newest version for the best performance.
 虽然本插件可以在PHP 5.2.4和WordPress 3.0环境下运行，但为了避免出现不可预料的问题，建议将PHP更新至7.2以上的版本，WordPress更新至最新版本。
 
@@ -48,7 +48,7 @@ Adds Captcha Code anti-spam methods to WordPress forms. Forms include comments f
 Thanks for downloading and installing my plugin. You can show your appreciation and support future development by donating. Blog page:
 感谢您下载安装这个插件。您可以通过氪金来支持我们继续开发。博客页面：
 
-[WordPress中文验证码](https://zhangshuqiao.org/2018-07/WordPress中文验证码)
+[WordPress中文验证码](https://zhangshuqiao.org/2018-07/WordPress中文验证码/)
 
 ### Development
 
@@ -57,15 +57,16 @@ Thanks for downloading and installing my plugin. You can show your appreciation 
 
 ### Known Issues
 
-If you're using Nginx server, wp_die() function may not show error page correctly.
-在Nginx服务器下，wp_die()可能无法正确显示错误信息。
+If you're using Nginx with php-fpm, 'wp_die()' function may not show error page correctly.
+在Nginx服务器下，'wp_die()'可能无法正确显示错误信息。
 This plugin uses SESSION to save user infomation, you can configure redis or memcached server in your php.ini for better performance.
 本插件使用了SESSION存储用户信息，这可能造成性能瓶颈。建议通过在php.ini中设置session.save_handler为redis或memcached（均需要安装拓展），以提高性能，解决此问题。
 
 ### TODO List
 
-Whitelist
-设置白名单（根据用户分类，或者IP地址）
+1. Blacklist
+设置黑名单（根据用户分类，或者IP地址）
+2. More user selectable fonts
 允许用户选择下载字体库
 
 ## Installation
@@ -73,7 +74,7 @@ Whitelist
 1. Download the plugin.
 下载插件
 2. Upload to your blog (/wp-content/plugins/).
-上传至你的博客（/wp-content/plugins/目录）
+上传至你的博客（/wp-content/plugins/）目录
 3. Activate it.
 激活插件
 4. Click the 'Mimi Captcha' menu.
@@ -90,11 +91,23 @@ Uninstalling is as simple as deactivating and deleting the plugin.
 
 ## Screenshots
 
-1. Mimi Captcha Settings page
-2. Comments form with Mimi Captcha
-3. Login form with Mimi Captcha
+1. Login form with Mimi Captcha
+2. Register form with Mimi Captcha
+3. Comments form with Mimi Captcha
+4. Mimi Captcha Settings page
 
 ## Change Log
+
+### Version 0.0.5
+
+* Bug fixes
+修复了已知问题
+
+### Version 0.0.4
+
+* Updated for WordPress 5.0
+针对WordPress 5.0版本更新
+* 如果需要在登陆密码输错若干次后限制该IP登陆，或拉入黑名单，可以使用插件Limit Login Attempts Reloaded，与本插件兼容且效果较好。
 
 ### Version 0.0.3
 
@@ -118,11 +131,11 @@ Uninstalling is as simple as deactivating and deleting the plugin.
 
 ## Upgrade Notice
 
-:)
+Have a nice day :)
 
 ## Credits
 
-This plugin is inspired by Vinoj Cardoza's Captcha Code, BestWebSoft's Google Captcha and Sola's User Generate Password. More infomation about them:
+This plugin is inspired by some other plugins. More infomation about them is listed below:
 本项目从Vinoj Cardoza的Captcha Code，BestWebSoft的Google Captcha和Sola的User Generate Password插件中获得了灵感。这些项目的重要信息如下：
 
 Plugin Name: Captcha Code
